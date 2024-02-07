@@ -1,0 +1,88 @@
+-- 부서 테이블 생성하기
+CREATE TABLE DEPT(
+	 DEPTNO INT PRIMARY KEY,
+	 DNAME VARCHAR(14),
+	 LOC   VARCHAR(13) ) ;
+
+-- 사원 테이블 생성하기
+CREATE TABLE EMP( 
+  	 EMPNO INT PRIMARY KEY,
+	 ENAME VARCHAR(10),
+ 	 JOB   VARCHAR(9),
+	 MGR  INT,
+	 HIREDATE DATETIME,
+	 SAL INT,
+	 COMM INT,
+	 DEPTNO INT CONSTRAINT FK_DEPTNO REFERENCES DEPT);
+
+ -- 급여 테이블 생성하기
+CREATE TABLE SALGRADE(
+	 GRADE INT,
+	 LOSAL INT,
+	 HISAL INT );
+
+-- 사원 테이블에 샘플 데이터 추가하기
+INSERT INTO DEPT VALUES(10, '경리부', '서울');
+INSERT INTO DEPT VALUES(20, '인사부', '인천');
+INSERT INTO DEPT VALUES(30, '영업부', '용인'); 
+INSERT INTO DEPT VALUES(40, '전산부', '수원');
+
+-- 부서 테이블에 샘플 데이터 추가하기
+INSERT INTO EMP VALUES(1001, '김사랑', '사원', 1013, DATE_FORMAT('2007-03-01','%Y-%m-%d %H"%i%s'), 300, NULL, 20);
+INSERT INTO EMP VALUES(1002, '한예슬', '대리', 1005, DATE_FORMAT('2007-04-02','%Y-%m-%d %H"%i%s'), 250,   80, 30);
+INSERT INTO EMP VALUES(1003, '오지호', '과장', 1005, DATE_FORMAT('2005-02-10','%Y-%m-%d %H"%i%s'), 500,  100, 30);
+INSERT INTO EMP VALUES(1004, '이병헌', '부장', 1008, DATE_FORMAT('2003-09-02','%Y-%m-%d %H"%i%s'), 600, NULL, 20);
+INSERT INTO EMP VALUES(1005, '신동협', '과장', 1005, DATE_FORMAT('2005-04-07','%Y-%m-%d %H"%i%s'), 450,  200, 30);
+INSERT INTO EMP VALUES(1006, '장동건', '부장', 1008, DATE_FORMAT('2003-10-09','%Y-%m-%d %H"%i%s'), 480, NULL, 30);
+INSERT INTO EMP VALUES(1007, '이문세', '부장', 1008, DATE_FORMAT('2004-01-08','%Y-%m-%d %H"%i%s'), 520, NULL, 10);
+INSERT INTO EMP VALUES(1008, '감우성', '차장', 1003, DATE_FORMAT('2004-03-08','%Y-%m-%d %H"%i%s'), 500,    0, 30);
+INSERT INTO EMP VALUES(1009, '안성기', '사장', NULL, DATE_FORMAT('1996-10-04','%Y-%m-%d %H"%i%s'),1000, NULL, 20);
+INSERT INTO EMP VALUES(1010, '이병헌', '과장', 1003, DATE_FORMAT('2005-04-07','%Y-%m-%d %H"%i%s'), 500, NULL, 10);
+INSERT INTO EMP VALUES(1011, '조향기', '사원', 1007, DATE_FORMAT('2007-03-01','%Y-%m-%d %H"%i%s'), 280, NULL, 30);
+INSERT INTO EMP VALUES(1012, '강혜정', '사원', 1006, DATE_FORMAT('2007-08-09','%Y-%m-%d %H"%i%s'), 300, NULL, 20);
+INSERT INTO EMP VALUES(1013, '박중훈', '부장', 1003, DATE_FORMAT('2002-10-09','%Y-%m-%d %H"%i%s'), 560, NULL, 20);
+INSERT INTO EMP VALUES(1014, '조인성', '사원', 1006, DATE_FORMAT('2007-11-09','%Y-%m-%d %H"%i%s'), 250, NULL, 10);
+
+-- 급여 테이블에 샘플 데이터 추가하기
+INSERT INTO SALGRADE VALUES (1, 700,1200);
+INSERT INTO SALGRADE VALUES (2, 1201,1400);
+INSERT INTO SALGRADE VALUES (3, 1401,2000);
+INSERT INTO SALGRADE VALUES (4, 2001,3000);
+INSERT INTO SALGRADE VALUES (5, 3001,9999);
+COMMIT;
+
+
+
+
+-- 뷰(view)
+-- 뷰 : 가상테이블
+
+-- 뷰가 유용하게 사용되는 경우
+-- 1) 테이블의 데이터 조회 시 조인이 지속적으로 반복되는 경우
+-- 2) 테이블의 특정 데이터를 보안성을 확보
+
+SELECT * FROM emp;
+
+-- EMP 테이블에 대한 첫번째 뷰 생성
+CREATE VIEW EMP_VIEW_1
+AS
+SELECT EMPNO, ENAME, JOB
+FROM emp;
+
+SELECT * FROM emp_view_1;
+
+
+CREATE OR REPLACE VIEW EMP_VIEW_2
+AS
+SELECT EMPNO, ENAME, SAL
+FROM emp
+WHERE SAL >= 350;
+
+SELECT * FROM emp_view_2;
+DROP VIEW emp_view_2;
+
+-- emp 테이블에 문제 생김
+
+
+
+
