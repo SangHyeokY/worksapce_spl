@@ -211,8 +211,8 @@ CREATE TABLE BUY_DETAIL (
 );
 
 
-SELECT * FROM shop_buy
-SELECT * FROM ..
+SELECT * FROM shop_buy;
+SELECT * FROM ..;
 
 
 -- IFNULL 앞 내용이  NULL이 나오면 뒤의 것으로 대체
@@ -260,3 +260,46 @@ SELECT ITEM_CODE
 		FROM SHOP_BUY
 		WHERE BUY_CODE = DETAIL.BUY_CODE) BUY_DATE
 FROM buy_detail DETAIL;
+
+
+SELECT BUY.BUY_CODE
+                , MEMBER_ID
+                , BUY_PRICE
+                , BUY_DATE
+                , BUY_CNT
+                , TOTAL_PRICE
+                , ITEM_NAME
+                , ATTACHED_FILE_NAME
+        FROM shop_buy Buy
+        INNER JOIN buy_detail DETAIL
+        ON BUY.BUY_CODE = DETAIL.BUY_CODE
+        INNER JOIN shop_item ITEM
+        ON ITEM.ITEM_CODE = DETAIL.ITEM_CODE
+        INNER JOIN ITEM_IMAGE IMG
+        ON IMG.ITEM_CODE = ITEM.ITEM_CODE
+        WHERE IS_MAIN = 'Y'
+        AND BUY.BUY_CODE = 1
+        ORDER BY BUY_DATE DESC;
+        
+SELECT BUY.BUY_CODE
+                , MEMBER_ID
+                , BUY_PRICE
+                , BUY_DATE
+                , BUY_CNT
+                , TOTAL_PRICE
+                , ITEM_NAME
+                , ATTACHED_FILE_NAME
+        FROM shop_buy Buy
+        INNER JOIN buy_detail DETAIL
+        ON BUY.BUY_CODE = DETAIL.BUY_CODE
+        INNER JOIN shop_item ITEM
+        ON ITEM.ITEM_CODE = DETAIL.ITEM_CODE
+        INNER JOIN ITEM_IMAGE IMG
+        ON IMG.ITEM_CODE = ITEM.ITEM_CODE
+        WHERE IS_MAIN = 'Y';
+        AND BUY.BUY_CODE = 8; 
+        
+SELECT * FROM shop_buy; 	
+SELECT * FROM buy_detail;	      
+COMMIT;   
+
