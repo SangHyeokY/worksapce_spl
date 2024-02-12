@@ -19,4 +19,13 @@ CREATE TABLE SALES_INFO (
 	, MODEL_NUMBER INT NOT NULL
 );
 
-SELECT * FROM CAR_INFO;
+SELECT * FROM sales_info;
+
+-- 미리 하나 등록해놓기
+INSERT INTO CAR_INFO VALUES (1, 'DH-3321', 3200000, '현대');
+COMMIT;
+
+ SELECT MODEL_NUMBER
+        , MODEL_NAME
+        , MAKER
+        FROM car_info;
