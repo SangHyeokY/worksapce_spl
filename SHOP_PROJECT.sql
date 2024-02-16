@@ -37,6 +37,14 @@ CREATE TABLE SHOP_ITEM (
 	, CATE_CODE INT NOT NULL REFERENCES item_category (CATE_CODE) 
 );
 
+-- 마리아DB 컬럼 추가
+-- 준비 중 : 1 
+-- 판매 중 : 2 
+-- 매진 : 3 
+ALTER TABLE shop_item ADD COLUMN ITEM_STATUS INT DEFAULT 1;
+
+
+
 -- 상품의 이미지 정보를 관리하는 테이블
 CREATE TABLE ITEM_IMAGE (
 	IMG_CODE INT AUTO_INCREMENT PRIMARY KEY
@@ -211,8 +219,17 @@ CREATE TABLE BUY_DETAIL (
 );
 
 
-SELECT * FROM shop_buy;
-SELECT * FROM ..;
+
+
+
+
+
+
+
+SELECT * FROM shop_item;
+UPDATE shop_item
+SET ITEM_STATUS = 2;
+COMMIT;
 
 
 -- IFNULL 앞 내용이  NULL이 나오면 뒤의 것으로 대체
@@ -299,7 +316,97 @@ SELECT BUY.BUY_CODE
         WHERE IS_MAIN = 'Y';
         AND BUY.BUY_CODE = 8; 
         
-SELECT * FROM shop_buy; 	
+        
+-- 2024.02.05일 구매 정보 조회
+-- 비교대상의 자료형을 서로 같게 바꾸자
+-- 문자열 -> 날짜 OR 날짜 -> 문자열
+SELECT * FROM shop_buy
+WHERE DATE_FORMAT(BUY_DATE, '%Y-%m-%d') = '2024-02-02';
+
+-- 문자열 -> 날짜
+SELECT NOW()
+	,	STR_TO_DATE('2024-02-05', '%Y-%m-%d');
+
+
+-- 날짜 -> 문자열
+SELECT BUY_DATE
+	, DATE_FORMAT(BUY_DATE, '%Y-%m-%d')
+	, DATE_FORMAT(BUY_DATE, '%Y-%m-%d %h:%i:%s')
+	, DATE_FORMAT(BUY_DATE, '%Y')
+	, DATE_FORMAT(BUY_DATE, '%Y.%m.%d')
+FROM shop_buy;
+
+
+
 SELECT * FROM buy_detail;	      
 COMMIT;   
 
+SELECT BUY_CODE
+        , MEMBER_ID
+        , BUY_PRICE
+        , BUY_DATE
+FROM shop_buy
+WHERE 1 = 1 -- 참인 조건 넣기 (오류 회피)
+AND BUY_CODE LIKE '%1%'
+AND DATE_FORMAT(BUY_DATE, '%Y-%m-%d') >= '2024-02-01'
+AND DATE_FORMAT(BUY_DATE, '%Y-%m-%d') <= '2024-02-29'
+ORDER BY BUY_DATE DESC;
+
+
+
+SELECT ITEM.ITEM_CODE
+        , ITEM_NAME
+        , ITEM_STOCK
+        , ITEM_STATUS
+        , CATE_NAME
+        , ATTACHED_FILE_NAME
+        FROM SHOP_ITEM ITEM
+        INNER JOIN ITEM_IMAGE IMG
+        ON ITEM.ITEM_CODE = IMG.ITEM_CODE;
+        
+-- IF문으로 숫자로 분류된거 문자로 바꾸기 IF(조건, 참, 거짓)
+-- 준비 중 : 1, 판매 중 : 2, 매진 : 3
+SELECT ITEM_CODE
+        , ITEM_NAME
+        , ITEM_STOCK
+        , ITEM_STATUS
+        , IF(ITEM_STATUS = 1, '준비 중', IF(ITEM_STATUS = 2, '판매 중', '매진')) AS '상태1'
+        , CASE
+        		WHEN ITEM_STATUS = 1 THEN '준비 중'
+				WHEN ITEM_STATUS = 2 THEN '판매 중'
+				ELSE '매진'
+				END AS '상태2'
+FROM shop_item;
+
+SELECT CATE_NAME
+		, ITEM.CATE_CODE
+		, ITEM_STOCK
+		, ITEM_NAME
+		, ITEM_STATUS
+		, ITEM.ITEM_CODE
+		, ATTACHED_FILE_NAME
+		, ORIGIN_FILE_NAME
+		, IMG_CODE
+FROM shop_item ITEM
+INNER JOIN item_category CATE
+ON ITEM.CATE_CODE = CATE.CATE_CODE
+INNER JOIN item_image IMG
+ON ITEM.ITEM_CODE = IMG.ITEM_CODE
+WHERE ITEM.ITEM_CODE = 3;
+
+SELECT CATE_NAME
+            , CATE.CATE_CODE
+            , ITEM_STOCK
+            , ITEM_NAME
+            , ITEM_STATUS
+            , ITEM.ITEM_CODE
+            , ATTACHED_FILE_NAME
+            , ORIGIN_FILE_NAME
+            , IMG_CODE
+        FROM shop_item ITEM
+        INNER JOIN item_category CATE
+        ON ITEM.CATE_CODE = CATE.CATE_CODE
+        INNER JOIN item_image IMG
+        ON ITEM.ITEM_CODE = IMG.ITEM_CODE
+        WHERE ITEM.ITEM_CODE = 3;
+        COMMIT;
