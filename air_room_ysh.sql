@@ -1,0 +1,64 @@
+-- 실내 공기
+CREATE TABLE air_quality (
+	AIR_NO INT AUTO_INCREMENT PRIMARY KEY
+	, PM_CODE INT NOT NULL
+	, PM_GRADE VARCHAR(10) DEFAULT '보통' -- 좋음, 보통, 나쁨, 매우 나쁨
+	, FPM_CODE INT NOT NULL
+	, FPM_GRADE VARCHAR(10) DEFAULT '보통' -- 좋음, 보통, 나쁨, 매우 나쁨
+	, CO2_CODE FLOAT NOT NULL
+	, VOCS_CODE INT NOT NULL
+	, SERIAL_NO VARCHAR(15) REFERENCES MAP (SERIAL_NO)
+);
+
+-- 실내통합지수
+CREATE TABLE CICI (
+	CICI_NO INT AUTO_INCREMENT PRIMARY KEY
+	, CICI_CODE INT NOT NULL
+	, CICI_GRADE VARCHAR(10) DEFAULT '보통' -- 좋음, 보통, 나쁨, 매우 나쁨
+	, SERIAL_NO VARCHAR(15) REFERENCES MAP (SERIAL_NO)
+);
+
+--  REFERENCES MAP (SERIAL_NO)
+-- ------------------------------------------------------------------
+
+-- 지도
+CREATE TABLE map (
+	SERIAL_NO VARCHAR(15) NOT NULL PRIMARY KEY
+	, STATION_NAME VARCHAR(20) NOT NULL
+	, LAT DOUBLE DEFAULT 37.0000
+	, LON DOUBLE DEFAULT 126.0000
+);
+
+-- ------------------------------------------------------------------
+
+--서초구 전체의 데이터 테이블
+CREATE TABLE AVERAGE (
+	AVERAGE_CODE INT AUTO_INCREMENT PRIMARY KEY
+	, PM_CODE INT REFERENCES AIR_QUALITY (PM_CODE)
+	, FPM_CODE INT REFERENCES AIR_QUALITY (FPM_CODE)
+	, CO2_CODE INT REFERENCES AIR_QUALITY (CO2_CODE)
+	, TEMPERATURE FLOAT REFERENCES TEMANDHUM (TEMPERATURE)
+	, HUMIDITY INT REFERENCES TEMANDHUM (HUMIDITY)
+	, DECIBEL INT REFERENCES DECIBEL_INFO (DECIBEL)
+);
+
+
+-- 각 위치의 데시벨 데이터 테이블
+CREATE TABLE DECIBEL_INFO (
+	DECIBEL_CODE INT AUTO_INCREMENT PRIMARY KEY
+	, DECIBEL INT NOT NULL
+	, DECIBEL_GRADE VARCHAR(10) NOT NULL DEFAULT '보통' -- '좋음, 보통, 나쁨'
+	, SERIAL_NO VARCHAR(15) REFERENCES MAP (SERIAL_NO)
+);
+
+-- ------------------------------------------------------------------
+
+WHERE age 'asdsa' > 20;
+
+
+-- ------------------------------------------------------------------
+
+
+SELECT * FROM air_quality;
+
+-- ------------------------------------------------------------------

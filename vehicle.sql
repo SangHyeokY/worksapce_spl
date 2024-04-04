@@ -34,7 +34,7 @@ COMMIT;
         
  SELECT CAR.MODEL_NUMBER
             , CUSTOMER_NAME
-            , CUSTOMER_TELsales_info
+            , CUSTOMER_TEL
             , SALES_DATE
             , CAR_COLOR
             , MODEL_NAME
